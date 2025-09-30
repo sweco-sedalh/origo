@@ -1,4 +1,5 @@
 {
+  "$schema": "",
   "controls": [
     {
       "name": "home",
@@ -9,7 +10,7 @@
     {
       "name": "mapmenu",
       "options": {
-        "isActive": false
+        "isActive": 32
       }
     },
     {

@@ -13,24 +13,25 @@
     "origo"
   ],
   "license": "BSD-2-Clause",
-  "main": "origo.js",
+  "main": "./dist/origo.umd.cjs",
+  "module": "./dist/origo.js",
+  "exports": {
+    ".": {
+      "import": "./dist/origo.js",
+      "require": "./dist/origo.umd.cjs"
+    },
+    "./origo.css": "./dist/origo.css"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "start": "npm run prebuild-sass | run-p watch-js watch-sass",
-    "lint": "eslint -c .eslintrc.json origo.js src/",
-    "lint-fix": "eslint -c .eslintrc.json origo.js src/ --fix",
-    "lint-run": "npm run prebuild-sass | webpack-dev-server --config ./tasks/webpack.lint.dev.js --mode development",
-    "lint-build": "webpack --config ./tasks/webpack.lint.prod.js && npm run build-sass | npm run copy-plugins | npm run copy",
-    "watch-js": "webpack-dev-server --config ./tasks/webpack.dev.js --mode development",
-    "watch-sass": "sass -w --load-path scss --load-path . scss/origo.scss css/style.css",
-    "prebuild-sass": "sass --load-path scss --load-path . scss/origo.scss css/style.css",
-    "build": "npm run build-js && npm run build-sass | npm run copy-plugins | npm run copy",
-    "build-dev": "npm run build-js && npm run build-sass | npm run copy-dev",
-    "build-sass": "sass --load-path scss --load-path . scss/origo.scss dist/style.css",
-    "build-js": "webpack --config ./tasks/webpack.prod.js",
-    "build-js-analyze": "webpack --config ./tasks/webpack.analyze.js",
-    "copy": "webpack --config ./tasks/webpack.copy.js",
-    "copy-dev": "webpack --config ./tasks/webpack.copy-dev.js",
-    "copy-plugins": "copyfiles plugins/* build"
+    "start": "vite serve",
+    "lint": "eslint -c .eslintrc.json origo.ts src/",
+    "lint-fix": "eslint -c .eslintrc.json origo.ts src/ --fix",
+    "build": "vite build",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@glidejs/glide": "^3.6.2",
@@ -44,26 +45,19 @@
     "ol": "^10.2.1",
     "ol-mapbox-style": "12.3.5",
     "pepjs": "^0.5.3",
-    "proj4": "^2.12.1"
+    "proj4": "^2.12.1",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^12.0.2",
+    "@types/proj4": "^2.5.6",
     "copyfiles": "^2.4.1",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-webpack-plugin": "^4.2.0",
-    "exports-loader": "^5.0.0",
-    "imports-loader": "^5.0.0",
     "npm-run-all": "^4.1.5",
     "run-sequence": "^2.2.1",
     "sass-embedded": "^1.82.0",
-    "source-map-loader": "^5.0.0",
-    "terser-webpack-plugin": "^5.3.10",
-    "webpack": "^5.94.0",
-    "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.2.1",
-    "webpack-merge": "^5.10.0"
+    "typescript": "^5.9.2",
+    "vite": "^6.3.6"
   }
 }

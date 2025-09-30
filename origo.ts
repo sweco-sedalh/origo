@@ -7,35 +7,54 @@ import * as olLayer from 'ol/layer';
 import * as olSource from 'ol/source';
 import * as olStyle from 'ol/style';
 import * as olFormat from 'ol/format';
-import * as ui from './src/ui';
-import Viewer from './src/viewer';
-import loadResources from './src/loadresources';
-import titleCase from './src/utils/titlecase';
-import * as origoControls from './src/controls';
-import * as origoExtensions from './src/extensions';
-import supports from './src/utils/supports';
-import renderError from './src/utils/rendererror';
-import Style from './src/style';
-import featurelayer from './src/featurelayer';
-import getFeatureInfo from './src/getfeatureinfo';
-import getFeature from './src/getfeature';
-import * as Utils from './src/utils';
-import dropdown from './src/dropdown';
-import { renderSvgIcon } from './src/utils/legendmaker';
-import SelectedItem from './src/models/SelectedItem';
+import * as ui from './src/ui.js';
+import Viewer from './src/viewer.js';
+import loadResources from './src/loadresources.js';
+import titleCase from './src/utils/titlecase.js';
+import * as origoControls from './src/controls.js';
+import * as origoExtensions from './src/extensions/index.js';
+import supports from './src/utils/supports.js';
+import renderError from './src/utils/rendererror.js';
+import Style from './src/style.js';
+import featurelayer from './src/featurelayer.js';
+import getFeatureInfo from './src/getfeatureinfo.js';
+import getFeature from './src/getfeature.js';
+import * as Utils from './src/utils.js';
+import dropdown from './src/dropdown.js';
+import { renderSvgIcon } from './src/utils/legendmaker.js';
+import SelectedItem from './src/models/SelectedItem.js';
 import 'elm-pep';
 import 'pepjs';
 import 'drag-drop-touch';
-import permalink from './src/permalink/permalink';
-import * as Loader from './src/loading';
-import Spinner from './src/utils/spinner';
-import layerType from './src/layer/layertype';
+import permalink from './src/permalink/permalink.js';
+import * as Loader from './src/loading.js';
+import Spinner from './src/utils/spinner.js';
+import layerType from './src/layer/layertype.js';
 
-const Origo = function Origo(configPath, options = {}) {
+export interface Options {
+    target: string | HTMLElement;
+    controls: [],
+    featureinfoOptions: any;
+    crossDomain: boolean;
+    keyboardEventTarget: HTMLElement | Document | Window;
+    svgSpritePath: string;
+    svgSprites: string[];
+    breakPoints: {
+      xs: number[];
+      s: number[];
+      m: number[];
+      l: number[];
+    };
+    breakPointsPrefix: string;
+    defaultControls: { name: string }[];
+    baseUrl?: string;
+}
+
+const Origo = function Origo(configPath, options: Partial<Options> = {}) {
   /** Reference to the returned Component */
   let origo;
   let viewer;
-  const origoConfig = {
+  const origoConfig: Options = {
     controls: [],
     featureinfoOptions: {},
     crossDomain: true,
@@ -63,7 +82,7 @@ const Origo = function Origo(configPath, options = {}) {
   const isSupported = supports();
   const el = options.target || origoConfig.target;
   if (!isSupported) {
-    renderError('browser', el);
+    renderError('browser', typeof el === "string" ? document.querySelector(el) : el);
     return null;
   }
 
@@ -173,8 +192,11 @@ const Origo = function Origo(configPath, options = {}) {
   });
 };
 
+// @ts-ignore
 olInteraction.Draw.createBox = createBox;
+// @ts-ignore
 olGeom.Polygon.fromCircle = fromCircle;
+// @ts-ignore
 olGeom.Polygon.fromExtent = fromExtent;
 Origo.controls = origoControls;
 Origo.extensions = origoExtensions;
@@ -183,25 +205,33 @@ Origo.Style = Style;
 Origo.featurelayer = featurelayer;
 Origo.getFeatureInfo = getFeatureInfo;
 Origo.getFeature = getFeature;
-Origo.ol = [];
-Origo.ol.geom = olGeom;
-Origo.ol.interaction = olInteraction;
-Origo.ol.layer = olLayer;
-Origo.ol.source = olSource;
-Origo.ol.style = olStyle;
-Origo.ol.Feature = olFeature;
-Origo.ol.Collection = olCollection;
-Origo.ol.Overlay = olOverlay;
-Origo.ol.format = olFormat;
+Origo.ol = {
+    geom: olGeom,
+    interaction: olInteraction,
+    layer: olLayer,
+    source: olSource,
+    style: olStyle,
+    format: olFormat,
+    Feature: olFeature,
+    Collection: olCollection,
+    Overlay: olOverlay,
+};
 Origo.Utils = Utils;
 Origo.dropdown = dropdown;
 Origo.renderSvgIcon = renderSvgIcon;
 Origo.SelectedItem = SelectedItem;
-Origo.Loader = {};
-Origo.Loader.show = Loader.showLoading;
-Origo.Loader.hide = Loader.hideLoading;
-Origo.Loader.withLoading = Loader.withLoading;
-Origo.Loader.getInlineSpinner = Spinner;
+Origo.Loader = {
+    showLoading: Loader.showLoading,
+    hideLoading: Loader.hideLoading,
+    withLoading: Loader.withLoading,
+    getInlineSpinner: Spinner,
+};
 Origo.layerType = layerType;
 
+import "./scss/origo.scss";
+
+export { ConfigurationSchema } from "./src/config";
+
 export default Origo;
+
+// import { ConfigurationSchema } from "origo/config";

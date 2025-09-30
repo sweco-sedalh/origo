@@ -15,10 +15,12 @@
 <body>
 <div id="app-wrapper">
 </div>
-<script src="js/origo.js"></script>
-<script type="text/javascript">
+<!--<script src="https://karta.eskilstuna.se/gemensamt/plugins/mvl.min.js"></script>-->
+<script type="module">
+    import Origo from "./origo.ts";
+
 	//Init origo
-		var origo = Origo('index.json');
+	var origo = Origo('index.json', { /*controls: { mapviewlist: async () => Mapviewlist }*/ });
 </script>
 </body>
 </html>

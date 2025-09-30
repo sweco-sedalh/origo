@@ -4,6 +4,7 @@ import getUrl from './utils/geturl';
 import isUrl from './utils/isurl';
 import trimUrl from './utils/trimurl';
 import stripJSONComments from './utils/stripjsoncomments';
+import { ConfigurationSchema } from "./config";
 
 function getQueryVariable(variable, storeMethod) {
   const query = window.location.search.substring(1);
@@ -112,9 +113,9 @@ const loadResources = async function loadResources(mapOptions, config) {
           .then(res => res.text())
           .then((bodyAsJson) => {
             const stripped = stripJSONComments(bodyAsJson);
-            let data;
+            let rawData;
             try {
-              data = JSON.parse(stripped);
+              rawData = JSON.parse(stripped);
             } catch (e) {
               const index = parseInt(e.message.split(' ').pop(), 10);
               if (index) {
@@ -124,6 +125,7 @@ const loadResources = async function loadResources(mapOptions, config) {
                 throw e;
               }
             }
+            const data = ConfigurationSchema.parse(rawData);
 
             map.options = Object.assign(config, data);
             map.options.controls = config.defaultControls.slice() || [];
